@@ -39,7 +39,7 @@ namespace ApiVersioningExample
                 // If we no longer want V1 to be available (e.g. no consumers of this version remain),
                 // we can set the startVersion to 2.
                 // If we want to introduce a new version, we can set currentVersion to 4.
-                options.Conventions = new IntroducedApiVersionConventionBuilder(1, 3);
+                options.Conventions = new IntroducedApiVersionConventionBuilder(new Version(1,0), new Version(3, 0));
             });
             
             services.AddApiExplorer();

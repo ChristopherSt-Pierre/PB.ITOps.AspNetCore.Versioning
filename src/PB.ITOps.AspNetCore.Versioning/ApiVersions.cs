@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 
+using static PB.ITOps.AspNetCore.Versioning.Constants;
+
 namespace PB.ITOps.AspNetCore.Versioning
 {
     internal class ApiVersions
@@ -11,16 +13,50 @@ namespace PB.ITOps.AspNetCore.Versioning
         
         internal IReadOnlyList<ApiVersion> AllVersions { get; }
 
-        internal ApiVersions(ushort startApiVersion, ushort currentApiVersion)
+        internal ApiVersions(Version startApiVersion, Version currentApiVersion)
         {
-            if (currentApiVersion < startApiVersion) throw new ArgumentException($"{nameof(currentApiVersion)} must be >= {nameof(startApiVersion)}");
+            if (currentApiVersion < startApiVersion)
+                throw new ArgumentException($"{nameof(currentApiVersion)} must be >= {nameof(startApiVersion)}");
 
-            _currentVersion = new ApiVersion(currentApiVersion, 0);
+            _currentVersion = new ApiVersion(currentApiVersion.Major, currentApiVersion.Minor);
             var allVersions = new List<ApiVersion>();
-            
-            for (var i = startApiVersion; i <= currentApiVersion; i++)
+
+            if (startApiVersion.Major == currentApiVersion.Major)
             {
-                allVersions.Add(new ApiVersion(i, 0));
+                for (var minor = startApiVersion.Minor; minor <= currentApiVersion.Minor; minor++)
+                {
+                    allVersions.Add(new ApiVersion(startApiVersion.Major, minor));
+                }
+            }
+            else
+            {
+                for (var major = startApiVersion.Major; major <= currentApiVersion.Major; major++)
+                {
+                    //Start
+                    if (major != currentApiVersion.Major && major == startApiVersion.Major)
+                    {
+                        for (var minor = startApiVersion.Minor; minor <= MAX_MINOR_VERSION_SUPPORTED; minor++)
+                        {
+                            allVersions.Add(new ApiVersion(major, minor));
+                        }
+                    }
+                    //Middle
+                    else if (major != currentApiVersion.Major && major != startApiVersion.Major)
+                    {
+                        for (var minor = 0; minor <= MAX_MINOR_VERSION_SUPPORTED; minor++)
+                        {
+                            allVersions.Add(new ApiVersion(major, minor));
+                        }
+                    }
+                    //End
+                    else if (major == currentApiVersion.Major)
+                    {
+                        for (var minor = 0; minor <= currentApiVersion.Minor; minor++)
+                        {
+                            allVersions.Add(new ApiVersion(major, minor));
+                        }
+                    }
+                }
             }
 
             AllVersions = allVersions;
