@@ -8,8 +8,8 @@ namespace PB.ITOps.AspNetCore.Versioning
 {
     public class IntroducedApiVersionConventionBuilder : ApiVersionConventionBuilder
     {
-        private readonly ushort _startVersion;
-        private readonly ushort _currentVersion;
+        private readonly Version _startVersion;
+        private readonly Version _currentVersion;
         private readonly ApiVersions _allVersions;
         private readonly ApiVersionConventionBuilder _apiVersionConventionBuilder;
 
@@ -23,12 +23,12 @@ namespace PB.ITOps.AspNetCore.Versioning
         /// </summary>
         /// <param name="startVersion">The lowest API version that is available.</param>
         /// <param name="currentVersion">The current supported API version.</param>
-        public IntroducedApiVersionConventionBuilder(ushort startVersion, ushort currentVersion) 
+        public IntroducedApiVersionConventionBuilder(Version startVersion, Version currentVersion) 
             : this(startVersion, currentVersion, new ApiVersionConventionBuilder())
         {
         }
         
-        internal IntroducedApiVersionConventionBuilder(ushort startVersion, ushort currentVersion, 
+        internal IntroducedApiVersionConventionBuilder(Version startVersion, Version currentVersion, 
             ApiVersionConventionBuilder apiVersionConventionBuilder)
         {
             _startVersion = startVersion;
@@ -61,8 +61,8 @@ namespace PB.ITOps.AspNetCore.Versioning
         private bool UseApiConvention(ApiVersion controllerIntroducedInVersion, ApiVersion controllerRemovedAsOfVersion)
         {
             return controllerIntroducedInVersion == null
-                   || controllerIntroducedInVersion.MajorVersion > _currentVersion
-                   || controllerRemovedAsOfVersion?.MajorVersion <= _startVersion;
+                   || new Version(controllerIntroducedInVersion.MajorVersion.Value,controllerIntroducedInVersion.MinorVersion.Value) > _currentVersion
+                   || (controllerRemovedAsOfVersion != null && controllerRemovedAsOfVersion.MajorVersion.HasValue && new Version(controllerRemovedAsOfVersion.MajorVersion.Value, controllerRemovedAsOfVersion .MinorVersion.Value) <= _startVersion);
         }
 
         private static void ValidateControllerVersions(ControllerModel controllerModel, ApiVersion controllerIntroducedInVersion,

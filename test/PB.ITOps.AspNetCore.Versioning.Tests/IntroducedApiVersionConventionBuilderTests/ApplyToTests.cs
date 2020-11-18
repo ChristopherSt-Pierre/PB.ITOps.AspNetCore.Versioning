@@ -27,7 +27,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         [Fact]
         public void GivenControllerDoesNotHaveIntroducedVersion_ThenUseApiConvention()
         {
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             var controllerModel = ControllerModelBuilder.ForController<StubController>().Build();
 
             var result = builder.ApplyTo(controllerModel);
@@ -39,7 +39,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         [Fact]
         public void GivenControllerIsIntroducedInFutureVersion_ThenUseApiConvention()
         {
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             var controllerModel = ControllerModelBuilder.ForController<StubController>()
                 .WithIntroducedInApiVersionAttribute(4)
                 .Build();
@@ -53,7 +53,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         [Fact]
         public void GivenControllerIsRemovedBeforeStartVersion_ThenUseApiConvention()
         {
-            var builder = new IntroducedApiVersionConventionBuilder(3, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(3, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             var controllerModel = ControllerModelBuilder.ForController<StubController>()
                 .WithIntroducedInApiVersionAttribute(1)
                 .WithRemovedAsOfApiVersionAttribute(2)
@@ -68,7 +68,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         [Fact]
         public void GivenControllerIsIntroduced_ThenControllerSupportedApiVersionSetToCurrentVersion()
         {
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             var controllerModel = ControllerModelBuilder.ForController<StubController>()
                 .WithIntroducedInApiVersionAttribute(1)
                 .Build();
@@ -84,7 +84,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         [Fact]
         public void GivenControllerIsIntroduced_ThenControllerDeprecatedApiVersionSetToPreviousVersions()
         {
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             var controllerModel = ControllerModelBuilder.ForController<StubController>()
                 .WithIntroducedInApiVersionAttribute(1)
                 .Build();
@@ -101,7 +101,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         [Fact]
         public void GivenControllerIsRemoved_ThenControllerSupportedVersionsEmpty()
         {
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1,0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             var controllerModel = ControllerModelBuilder.ForController<StubController>()
                 .WithIntroducedInApiVersionAttribute(1)
                 .WithRemovedAsOfApiVersionAttribute(2)
@@ -117,7 +117,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         [Fact]
         public void GivenControllerIsRemoved_ThenControllerDeprecatedVersions()
         {
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             var controllerModel = ControllerModelBuilder.ForController<StubController>()
                 .WithIntroducedInApiVersionAttribute(1)
                 .WithRemovedAsOfApiVersionAttribute(2)
@@ -134,7 +134,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         [Fact]
         public void GivenControllerIsIntroducedTwice_ThenInvalidOperationExceptionIsThrown()
         {
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             var controllerModel = ControllerModelBuilder.ForController<StubController>()
                 .WithIntroducedInApiVersionAttribute(1)
                 .WithIntroducedInApiVersionAttribute(2)
@@ -146,7 +146,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         [Fact]
         public void GivenControllerIsRemovedTwice_ThenInvalidOperationExceptionIsThrown()
         {
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             var controllerModel = ControllerModelBuilder.ForController<StubController>()
                 .WithIntroducedInApiVersionAttribute(1)
                 .WithRemovedAsOfApiVersionAttribute(2)
@@ -159,7 +159,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         [Fact]
         public void GivenControllerIsRemovedInSameVersionAsIntroduced_ThenInvalidOperationExceptionIsThrown()
         {
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             var controllerModel = ControllerModelBuilder.ForController<StubController>()
                 .WithIntroducedInApiVersionAttribute(1)
                 .WithRemovedAsOfApiVersionAttribute(1)
@@ -171,7 +171,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         [Fact]
         public void GivenControllerIsRemovedBeforeIntroduced_ThenInvalidOperationExceptionIsThrown()
         {
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             var controllerModel = ControllerModelBuilder.ForController<StubController>()
                 .WithIntroducedInApiVersionAttribute(2)
                 .WithRemovedAsOfApiVersionAttribute(1)
@@ -184,7 +184,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         public void GivenControllerIsIntroducedAndActionHasNoAttribute_ThenActionSupportedSetToControllerSupported()
         {
             // Arrange
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             
             var action = ActionModelBuilder
                 .WithAction<StubController>(c => c.Get())
@@ -211,7 +211,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         public void GivenControllerIsIntroducedAndActionHasNoAttribute_ThenActionDeprecatedApiVersionSetToPreviousVersions()
         {
             // Arrange
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             
             var action = ActionModelBuilder
                 .WithAction<StubController>(c => c.Get())
@@ -240,7 +240,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         public void GivenActionIsRemovedInFutureVersion_ThenActionSupportedApiVersionsSetToCurrent()
         {
             // Arrange
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             
             var action = ActionModelBuilder
                 .WithAction<StubController>(c => c.Get())
@@ -269,7 +269,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         public void GivenActionIsIntroducedInNewerVersionThanController_ThenActionSupportedApiVersionsSetToCurrent()
         {
             // Arrange
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             
             var action = ActionModelBuilder
                 .WithAction<StubController>(c => c.Get())
@@ -298,7 +298,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         public void GivenActionIsIntroducedInNewerVersionThanController_ThenActionDeprecatedApiVersionsSet()
         {
             // Arrange
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             
             var action = ActionModelBuilder
                 .WithAction<StubController>(c => c.Get())
@@ -329,7 +329,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         public void GivenActionIsRemovedInPreviousOrCurrentVersion_ThenActionSupportedApiVersionsSetToEmpty(ushort versionRemoved)
         {
             // Arrange
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             
             var action = ActionModelBuilder
                 .WithAction<StubController>(c => c.Get())
@@ -359,7 +359,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         public void GivenActionIsRemovedInPreviousOrCurrentVersion_ThenActionDeprecatedApiVersionsSet(ushort versionRemoved, params int[] deprecatedVersion)
         {
             // Arrange
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             
             var action = ActionModelBuilder
                 .WithAction<StubController>(c => c.Get())
@@ -391,7 +391,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         public void GivenActionIsRemovedBeforeIntroducedInController_ThenInvalidOperationExceptionIsThrown()
         {
             // Arrange
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             
             var action = ActionModelBuilder
                 .WithAction<StubController>(c => c.Get())
@@ -416,7 +416,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         public void GivenActionIsRemovedSameVersionIntroducedInController_ThenInvalidOperationExceptionIsThrown()
         {
             // Arrange
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             
             var action = ActionModelBuilder
                 .WithAction<StubController>(c => c.Get())
@@ -441,7 +441,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         public void GivenActionIsRemovedSameVersionIntroducedInAction_ThenInvalidOperationExceptionIsThrown()
         {
             // Arrange
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             
             var action = ActionModelBuilder
                 .WithAction<StubController>(c => c.Get())
@@ -467,7 +467,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         public void GivenActionIsRemovedBeforeIntroducedInAction_ThenInvalidOperationExceptionIsThrown()
         {
             // Arrange
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             
             var action = ActionModelBuilder
                 .WithAction<StubController>(c => c.Get())
@@ -493,7 +493,7 @@ namespace PB.ITOps.AspNetCore.Versioning.Tests.IntroducedApiVersionConventionBui
         public void GivenActionIsIntroducedBeforeIntroducedInController_ThenInvalidOperationExceptionIsThrown()
         {
             // Arrange
-            var builder = new IntroducedApiVersionConventionBuilder(1, 3, _apiVersionConventionBuilder.Object);
+            var builder = new IntroducedApiVersionConventionBuilder(new Version(1, 0), new Version(3, 0), _apiVersionConventionBuilder.Object);
             
             var action = ActionModelBuilder
                 .WithAction<StubController>(c => c.Get())
